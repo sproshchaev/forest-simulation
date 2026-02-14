@@ -18,6 +18,11 @@ public class App {
 
         SimpleSimulation simulation = new SimpleSimulation(config);
         simulation.initialize();
+
+        // Выводим начальное состояние
+        log.info("Начальное состояние:");
+        simulation.printStatistics();
+
         simulation.run(10);
         log.info("Симуляция завершена.");
     }

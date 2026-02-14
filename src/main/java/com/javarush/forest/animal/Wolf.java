@@ -1,5 +1,6 @@
 package com.javarush.forest.animal;
 
+import com.javarush.forest.model.Island;
 import com.javarush.forest.model.Location;
 import lombok.extern.slf4j.Slf4j;
 

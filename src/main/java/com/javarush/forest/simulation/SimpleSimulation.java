@@ -86,7 +86,7 @@ public class SimpleSimulation {
         printStatistics();
     }
 
-    private void printStatistics() {
+    public void printStatistics() {
         int wolves = 0, rabbits = 0, deer = 0, plants = 0;
         for (int y = 0; y < island.getHeight(); y++) {
             for (int x = 0; x < island.getWidth(); x++) {
