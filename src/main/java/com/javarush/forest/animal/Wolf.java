@@ -15,7 +15,10 @@ public class Wolf extends Animal {
 
     private static final double WEIGTH = 50;
     private static final double MAX_SATIETY = 30;
-    private static final Map<Class<? extends Animal>, Integer> EATING_PROBABILITIES = Map.of(); //todo добавить сущности Кролик и Олень
+    /**
+     * Для хищника определена карта вероятности (v1, v2)
+     */
+    private static final Map<Class<? extends Animal>, Integer> EATING_PROBABILITIES = Map.of(Rabbit.class, 60, Deer.class, 80); //todo заменить магические числа!
 
     public Wolf() {
         super(WEIGTH, MAX_SATIETY);

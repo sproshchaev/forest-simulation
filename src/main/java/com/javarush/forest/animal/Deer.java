@@ -6,7 +6,7 @@ import com.javarush.forest.model.Plant;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Deer - травоядное
+ * Deer - травоядное, есть растение (Plant)
  */
 @Slf4j
 public class Deer extends Animal {
