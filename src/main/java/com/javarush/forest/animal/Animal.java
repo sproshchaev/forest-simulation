@@ -1,5 +1,8 @@
 package com.javarush.forest.animal;
 
+import com.javarush.forest.model.Island;
+import com.javarush.forest.model.Location;
+
 import java.util.Map;
 
 public abstract class Animal {
