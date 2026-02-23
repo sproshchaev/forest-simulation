@@ -1,4 +1,4 @@
-# Forest Simulation
+# Forest Simulation 
 
 ```angular2html
 com.javarush.forest
@@ -22,3 +22,17 @@ App - Главный класс для запуска (точка входа)
 ```
 
 2. Подключение зависимостей в pom.xml 
+
+3. Forest Simulation v.2.0
+Переход от однопоточной простой симуляции к многопоточной
+```angular2html
+План:
+- Добавить многопоточность c ScheduledExecutorService и пул потоков
+- Реализовать движения и размножения
+- Синхронизация доступа к клеткам (исключить гонку потоков, исключить deadlock)
+
+Подходы:
+- Один ScheduledExecutorService для запуска таков
+- Внутри такта мы создаем список задач (Callable) для каждого животного и отправляем в ExecutorService.invokeAll()
+- Синхронизация коллекций: использование CopyOnWriteArrayList/synchronized методы для коллекций
+```
