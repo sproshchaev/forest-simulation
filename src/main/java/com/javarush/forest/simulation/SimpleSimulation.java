@@ -64,7 +64,7 @@ public class SimpleSimulation {
     public void tick() {
         // 1) Рост растений
         for (int y = 0; y < island.getHeight(); y++) {
-            for (int x = 0; x <island.getWidth(); x++) {
+            for (int x = 0; x < island.getWidth(); x++) {
                 Location location = island.getLocation(x, y);
                 for (int i = 0; i < config.getPlantsPerCell(); i++) {
                     location.addPlant(new Plant());
@@ -84,7 +84,7 @@ public class SimpleSimulation {
                     animal.move(island, x, y);
                     animal.reproduce(location);
                     // Уменьшить сытость
-                    animal.setCurrentSatiety(animal.getCurrentSatiety() - 1); // todo магическое число
+                    animal.setCurrentSatiety(animal.getCurrentSatiety() - 0.01); // todo магическое число
                     if (animal.getCurrentSatiety() <= 0) {
                         animal.die();
                         location.removeAnimal(animal);
@@ -96,7 +96,6 @@ public class SimpleSimulation {
     }
 
     public void printStatistics() {
-        // todo вывести статистику
         int wolves = 0;
         int rabbit = 0;
         int deer = 0;
@@ -105,7 +104,7 @@ public class SimpleSimulation {
             for (int x = 0; x < island.getWidth(); x++) {
                 Location location = island.getLocation(x, y);
                 for (Animal animal : location.getAnimals()) {
-                    if (animal instanceof  Wolf) {
+                    if (animal instanceof Wolf) {
                         wolves++;
                     }
                     if (animal instanceof Rabbit) {
@@ -121,12 +120,19 @@ public class SimpleSimulation {
         }
     }
 
+    /**
+     * В методе используется число ticks
+     *
+     * @param ticks - число тактов симуляции
+     * @throws InterruptedException - возможное исключение
+     */
     public void run(int ticks) throws InterruptedException {
         for (int i = 0; i < ticks; i++) {
             log.info("Такт {}", i + 1);
+            tick();
+            Thread.sleep(1000); // todo магическое число
         }
-        tick();
-        Thread.sleep(1000); // todo магическое число
+
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -142,7 +148,6 @@ public class SimpleSimulation {
         simpleSimulation.initialize();
         simpleSimulation.run(10);
     }
-
 
 
 }

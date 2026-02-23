@@ -8,7 +8,7 @@ import lombok.Data;
  * Билдер позволяет создавать объекты в стиле SimulationConfig.builder().islandWidth(10)...build()
  */
 @Data
-@Builder // аннотация из lombok
+@Builder // аннотация из lombok (Паттерн Билдер)
 public class SimulationConfig {
     // Размеры Леса (Острова)
     private int islandWidth;
