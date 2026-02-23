@@ -14,11 +14,13 @@ import java.util.concurrent.ThreadLocalRandom;
 @NoArgsConstructor
 @Slf4j
 public abstract class Animal {
+    private static final int CHANCE_OF_REPRODUCTION = 30; // шанс размножения
     protected double weight;
     protected double maxSatiety; // максимальная сытость
     protected double currentSatiety; // текущая сытость
     protected boolean alive = true; // животное живое
     protected int speed = 1; // скорость перемещения
+    // volatile гарантирует что все потоки увидят актуальное значение
     protected volatile Location currentLocation; // текущее местонахождение животного
 
     // Карта вероятности поедания других животных
@@ -68,17 +70,25 @@ public abstract class Animal {
 
     }
 
+    /**
+     * Многопоточный метод reproduce().
+     * @param location
+     */
     public void reproduce(Location location) {
         if (!alive) {
             return;
         }
+        // Подсчет особей того же вида (фильтруем только живых и тогоже класса, кроме самого себя)
         long sameSpeciesCount = location.getAnimals().stream()
                 .filter(a -> a.getClass() == this.getClass() && a != this && a.isAlive()) // промежуточная
                 .count(); // терминальная
-        if (sameSpeciesCount > 0 && ThreadLocalRandom.current().nextInt(100) < 30) {
+        // Условие для размножения животных: наличие хотя бы одной особи того же вида (sameSpeciesCount), шанс размножения
+        if (sameSpeciesCount > 0 && ThreadLocalRandom.current().nextInt(100) < CHANCE_OF_REPRODUCTION) {
             try {
+                // Создание потомка через рефлексию (не требуется значение конкретного подкласса во время компиляции)
                 Animal baby = this.getClass().getDeclaredConstructor().newInstance();
-                baby.setCurrentSatiety(baby.getMaxSatiety() / 2);
+                baby.setCurrentSatiety(baby.getMaxSatiety() / 2); // установка начальной сытости - как половина от максимальной для животного
+                location.addAnimal(baby); // родившееся животное добавляем в локацию
                 log.debug("Родилось животное {}", baby.getClass().getSimpleName());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 log.error("Ошибка при создании нового животного!");
