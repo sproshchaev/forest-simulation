@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -67,7 +68,24 @@ public abstract class Animal {
 
     }
 
-    public abstract void reproduce(Location location);
+    public void reproduce(Location location) {
+        if (!alive) {
+            return;
+        }
+        long sameSpeciesCount = location.getAnimals().stream()
+                .filter(a -> a.getClass() == this.getClass() && a != this && a.isAlive()) // промежуточная
+                .count(); // терминальная
+        if (sameSpeciesCount > 0 && ThreadLocalRandom.current().nextInt(100) < 30) {
+            try {
+                Animal baby = this.getClass().getDeclaredConstructor().newInstance();
+                baby.setCurrentSatiety(baby.getMaxSatiety() / 2);
+                log.debug("Родилось животное {}", baby.getClass().getSimpleName());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                log.error("Ошибка при создании нового животного!");
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     public void die() {
         this.alive = false;
