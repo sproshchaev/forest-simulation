@@ -135,7 +135,7 @@ public class MultithreadedSimulation {
                 plants += location.getPlants().size();
             }
         }
-        log.info("Статистика: Волки={}, Кролики={}, Олени={}, Растения={}", wolves, rabbits, deer);
+        log.info("Статистика: Волки={}, Кролики={}, Олени={}, Растения={}", wolves, rabbits, deer, plants);
     }
 
     public void start() {
