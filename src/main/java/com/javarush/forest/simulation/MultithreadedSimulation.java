@@ -104,7 +104,7 @@ public class MultithreadedSimulation {
         }
 
         try {
-            List<Future<Void>> futures = workerPool.invokeAll(tasks);
+            List<Future<Void>> futures = workerPool.invokeAll(tasks); // Отправляем действия в пул рабочих потоков
             for (Future<Void> f : futures) {
                 f.get();
             }
