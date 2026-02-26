@@ -3,8 +3,8 @@ package com.javarush.forest.model;
 import com.javarush.forest.animal.Animal;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Класс Локация содержит списки животных и растений.
@@ -13,13 +13,12 @@ import java.util.List;
 public class Location {
 
     @Getter
-    private final List<Animal> animals = new ArrayList<>();
-
-    @Getter
-    private final List<Plant> plants = new ArrayList<>();
+    private final List<Animal> animals = new CopyOnWriteArrayList<>(); // многопоточность (1)
+    private final List<Plant> plants = new CopyOnWriteArrayList<>();
 
     public void addAnimal(Animal animal) {
         animals.add(animal);
+        animal.setCurrentLocation(this);
     }
 
     public void removeAnimal(Animal animal) {
@@ -30,12 +29,16 @@ public class Location {
         plants.add(plant);
     }
 
-    // Для однопоточной версии простое удаление растения
     public Plant removePlant() {
-        if (!plants.isEmpty()) {
-            return plants.remove(plants.size() - 1);
+        synchronized (plants) { // многопоточность (2)
+            if (!plants.isEmpty()) {
+                return plants.remove(plants.size() - 1);
+            }
+            return null;
         }
-        return null;
     }
 
+    public List<Plant> getPlants() {
+        return plants;
+    }
 }
